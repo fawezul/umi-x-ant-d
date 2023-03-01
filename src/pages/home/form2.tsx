@@ -26,7 +26,7 @@ export default function Form(){
     return(
         <>
 
-       <form onSubmit = {(e) => onSubmit}>
+       <form onSubmit = {onSubmit}>
        <label htmlFor="title">Write something</label>
        <br/>
        <Input type = "text" id = "title" value={title} onChange={onChange} />
