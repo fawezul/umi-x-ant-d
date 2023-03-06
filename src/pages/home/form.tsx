@@ -1,38 +1,53 @@
-import { Input } from "antd";
-import React, {MouseEventHandler, useState} from "react";
+import React, { useState } from "react";
 
-
-type button ={
-    onClick: (event: MouseEventHandler<HTMLButtonElement>) => void
+//serializing the defaultFormData
+interface DefaultFormData {
+  answer:string; //dont change this
 }
+const defaultFormData: DefaultFormData  = {
+  answer:"",
+};
 
 
-const Form = () => {
-
-    const [values,setValues] = useState([""]   
-    );
-
-    const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = e.target.value;
-        const inputName = e.target.name;
-
-        setValues((prevValue) => {
-            return [newValue] })};
+export default function Form(){
+    const [formData, setFormData] = useState(defaultFormData); // formData = defaultFormData
+    const {answer} = formData; //deconstructing object
     
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData((prevState) => ({ //changes formData according to input value being typed from user.
+            ...prevState,
+            [e.target.name]: e.target.value,
+        }));
+    };
 
-    const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        console.log(values)
-    }
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault(); // prevent the form from submitting and refreshing the page
 
-    return (
+        console.log(formData);
         
-            <form>
-                <Input type = {"text"} onChange={inputChange} name={"inputName"}/>
-                <button onClick={handleSubmit} type={"submit"} >Submit</button>
-            </form>
+
+        fetch('http://127.0.0.1:8000/submit-form', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json',
+                      },
+          body: JSON.stringify(formData), //convert to JSON string
+        })
+          .then(response => response.json())
+          .then(data => console.log(data))
+          .catch(error => console.error(error));
+        
+         setFormData(defaultFormData); //resets formData
+  }
+    return(
+        <>
+
+       <form onSubmit = {onSubmit} action="/submit-form" method = "post">
        
+       <br/>
+       <input type = "text" name = "answer" value={answer} onChange={onChange} />
+       <button type = "submit">Submit</button>
+
+       </form>
+       </>
     );
 }
-
-export default Form;
