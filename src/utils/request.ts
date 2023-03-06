@@ -100,4 +100,3 @@ const post = (url: string, data: any) => {
 
 
 export { get, post };
-

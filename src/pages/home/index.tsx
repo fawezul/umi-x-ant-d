@@ -1,10 +1,12 @@
 import { getQuestion } from '@/api/book';
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './index.less';
-import Form from "./form2"
-// 2 functions
+import Form from "./form"
 
-export default function  () {
+
+const result={}
+
+export default function () {
   const [results, setResults] = useState<any[]>([]);
 
     const GetQuestion = async () => { //connect to api
@@ -25,8 +27,8 @@ export default function  () {
 
     <div className={styles.scroller}>
     {results.map((item, index) => 
-    <div key= {index}>{item.question} <br></br> 
-    <Form/>
+    <div key= {index}>{item.id}. {item.question} <br></br> 
+    <Form valueToSave= {item.id}/><br></br>
     </div>
     )} 
 
