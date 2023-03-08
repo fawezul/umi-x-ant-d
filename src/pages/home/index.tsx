@@ -34,6 +34,8 @@ export default function () {
     setUserAnswer([...userAnswer, { questionId, answer }]);
     handleNext();
   };
+  //results = questions
+  //answerResult = user's answers
 
   return (
     <div>
@@ -51,13 +53,17 @@ export default function () {
       {results.length > 0 && (
           <div>
             <h2>Previous Answers</h2>
-            <ul>
-              {userAnswer.map(result => (
-                <li key={result.questionId}>
-                  Question {result.questionId}: {result.answer}
-                </li>
-              ))}
-            </ul>
+            <ol>
+  {userAnswer.map(answerResult => {
+    const resultIndex = results.findIndex(result => result.id === answerResult.questionId);
+    const question = resultIndex !== -1 ? results[resultIndex].question : "";
+    return (
+      <li key={answerResult.questionId}>
+        {question}: {answerResult.answer}
+      </li>
+    );
+  })}
+</ol>
           </div>
         )}
       </div>
