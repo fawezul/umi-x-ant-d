@@ -3,16 +3,16 @@ import React, { useEffect, useState } from "react";
 //serializing the defaultFormData
 interface DefaultFormData {
   answer:string; //dont change this
-  id:string
+  id:number
 }
 const defaultFormData: DefaultFormData  = {
   answer:"",
-  id:""
+  id:0
 };
 
 interface MyFormProps {
-  valueToSave: string;
-  onSubmit: () => void; //create this prop to pass in nextQuestion function from index.tsx
+  valueToSave: number;
+  onSubmit: (questionId: number, answer: string) => void; //create this prop to pass in nextQuestion function from index.tsx
 }
 
 export default function Form({ valueToSave, onSubmit }: MyFormProps){//exporting these two props as a requirement in the index.tsx
@@ -35,7 +35,7 @@ export default function Form({ valueToSave, onSubmit }: MyFormProps){//exporting
     const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // prevent the form from submitting and refreshing the page
 
-        onSubmit(); //calls the nextQuestion function from index.tsx
+        onSubmit(formData.id, formData.answer); //calls the nextQuestion function from index.tsx
 
         console.log(formData); 
 
