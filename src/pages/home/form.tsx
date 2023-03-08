@@ -1,38 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 //serializing the defaultFormData
 interface DefaultFormData {
   answer:string; //dont change this
+  id:string
 }
 const defaultFormData: DefaultFormData  = {
   answer:"",
+  id:""
 };
 
 interface MyFormProps {
   valueToSave: string;
+  onSubmit: () => void; //create this prop to pass in nextQuestion function from index.tsx
 }
 
-export default function Form(props: MyFormProps){
+export default function Form({ valueToSave, onSubmit }: MyFormProps){//exporting these two props as a requirement in the index.tsx
     const [formData, setFormData] = useState(defaultFormData); // formData = defaultFormData
     const {answer} = formData; //deconstructing object
 
-    const [savedValue, setSavedValue] = useState('');
+    
+    const [savedValue, setSavedValue] = useState(formData.id);
     
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData((prevState) => ({ //changes formData according to input value being typed from user.
-            ...prevState,
-            [e.target.name]: e.target.value,
-        }));
-        setSavedValue(props.valueToSave);
-        
+      setSavedValue(valueToSave);
+  
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+        id: savedValue,
+      });
     };
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // prevent the form from submitting and refreshing the page
 
-        console.log(formData);
-        console.log(savedValue);
-        
+        onSubmit(); //calls the nextQuestion function from index.tsx
+
+        console.log(formData); 
 
         fetch('http://127.0.0.1:8000/submit-form', {
           method: 'POST',
@@ -50,7 +55,7 @@ export default function Form(props: MyFormProps){
     return(
         <>
 
-       <form onSubmit = {onSubmit} action="/submit-form" method = "post">
+       <form onSubmit = {formSubmit} action="/submit-form" method = "post">
        
        <br/>
        <input type = "text" name = "answer" value={answer} onChange={onChange} />
