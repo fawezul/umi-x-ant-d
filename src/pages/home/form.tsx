@@ -11,19 +11,24 @@ const defaultFormData: DefaultFormData  = {
 };
 
 interface MyFormProps {
-  valueToSave: number;
-  onSubmit: (questionId: number, answer: string) => void; //create this prop to pass in nextQuestion function from index.tsx
+  IDToSave: number;
+  onSubmit: (ccId: number, answer: string) => void; //create this prop to pass in nextQuestion function from index.tsx
 }
+//deconstructing
 
-export default function Form({ valueToSave, onSubmit }: MyFormProps){//exporting these two props as a requirement in the index.tsx
+const formProps: MyFormProps = {
+  IDToSave: 0,
+  onSubmit: (ccId: number, answer: string) => {}
+};
+export default function Form({ IDToSave, onSubmit }: MyFormProps){//exporting these two props as a requirement in the index.tsx, also passing in values from index.
     const [formData, setFormData] = useState(defaultFormData); // formData = defaultFormData
     const {answer} = formData; //deconstructing object
 
     
-    const [savedValue, setSavedValue] = useState(formData.id);
+    const [savedValue, setSavedValue] = useState(IDToSave);
     
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSavedValue(valueToSave);
+      setSavedValue(IDToSave);
   
       setFormData({
         ...formData,
@@ -35,7 +40,7 @@ export default function Form({ valueToSave, onSubmit }: MyFormProps){//exporting
     const formSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // prevent the form from submitting and refreshing the page
 
-        onSubmit(formData.id, formData.answer); //calls the nextQuestion function from index.tsx
+        onSubmit(formData.id, formData.answer); //uses the nextQuestion function from index.tsx, also for user's answer parameter in index
 
         console.log(formData); 
 

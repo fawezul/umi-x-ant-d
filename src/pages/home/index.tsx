@@ -3,15 +3,15 @@ import { useEffect, useState } from 'react';
 import styles from './index.less';
 import Form from "./form"
 
-type Answer = { //for user's previous answer display
-  questionId: number;
-  answer: string;
+type Answer = { //for user's previous answer display - property structure
+  numberID: number;
+  theirAnswer: string;
 };
 
 export default function () {
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<any[]>([]); //create array for questions from db
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [userAnswer, setUserAnswer] = useState<Answer[]>([]);
+  const [userAnswer, setUserAnswer] = useState<Answer[]>([]); //create array for user's answer
 
   const GetQuestion = async () => {
     const result = await getQuestion();
@@ -29,9 +29,9 @@ export default function () {
     setCurrentIndex(currentIndex + 1);
   };
 
-  const handleSubmit = (questionId: number, answer: string) => {
+  const nextQuestion = (numberID: number, theirAnswer: string) => {//from form, it passes in the 2 values once the form is submitted
     console.log('Form submitted');
-    setUserAnswer([...userAnswer, { questionId, answer }]);
+    setUserAnswer([...userAnswer, { numberID, theirAnswer }]); //changes the value of id and ans
     handleNext();
   };
   //results = questions
@@ -44,12 +44,12 @@ export default function () {
       {results.length > 0 && (
           <div>
             <ol>
-              {userAnswer.map(answerResult => {
-               const resultIndex = results.findIndex(result => result.id === answerResult.questionId);
-               const question = resultIndex !== -1 ? results[resultIndex].question : "";
+              {userAnswer.map(answerResult => { //answerResult contains user answer
+               const resultIndex = results.findIndex(result => result.id === answerResult.numberID); //finds the question index and if matches, resultIndex = question index
+               const question = resultIndex !== -1 ? results[resultIndex].question : ""; //get question from the results list (contains all questions)
               return (
-                <li key={answerResult.questionId}>
-                    {question}: {answerResult.answer}
+                <li key={answerResult.numberID}>
+                    {question}: {answerResult.theirAnswer}
                 </li>
                    );})}
             </ol>
@@ -61,14 +61,12 @@ export default function () {
         {results.length > 0 && currentIndex < results.length ? (
           <div key={results[currentIndex].id}>
             <div>{results[currentIndex].id}. {results[currentIndex].question}</div>
-            <Form valueToSave={results[currentIndex].id} onSubmit={(questionId: number, answer: string) => handleSubmit(results[currentIndex].id, answer)} />
+            <Form IDToSave={results[currentIndex].id} onSubmit={(questionId: number, answer: string) => nextQuestion(questionId=results[currentIndex].id, answer)} />
           </div>
         ) : (
           <div>No more questions to show<br></br>Audio Link</div>
         )}
    </div>
-
-
 
     </div>
   );
