@@ -22,6 +22,7 @@
   "dependencies": {
     "@ant-design/pro-layout": "^6.5.0",
     "antd": "^5.2.3",
+    "microsoft-cognitiveservices-speech-sdk": "^1.26.0",
     "react": "17.x",
     "react-dom": "17.x",
     "umi": "^3.5.36"

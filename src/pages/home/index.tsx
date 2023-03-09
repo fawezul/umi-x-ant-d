@@ -29,7 +29,7 @@ export default function () {
     setCurrentIndex(currentIndex + 1);
   };
 
-  const nextQuestion = (numberID: number, theirAnswer: string) => {//from form, it passes in the 2 values once the form is submitted
+  const nextQuestion = (numberID: number, theirAnswer: string) => {//take in 2 values
     console.log('Form submitted');
     setUserAnswer([...userAnswer, { numberID, theirAnswer }]); //changes the value of id and ans
     handleNext();
