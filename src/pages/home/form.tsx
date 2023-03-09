@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useState} from "react";
 
 //serializing the defaultFormData
 interface DefaultFormData {
@@ -11,16 +11,15 @@ const defaultFormData: DefaultFormData  = {
 };
 
 interface MyFormProps {
-  IDToSave: number;
-  onSubmit: (ccId: number, answer: string) => void; //create this prop to pass in nextQuestion function from index.tsx
+  IDToSave: number //for passing in the question ID  
+  onSubmit: (ccId: number, helpAnswer: string) => void; //structures the onSubmit attribute to match nextQuestion parameters (numberID: number, theirAnswer: string)
 }
 //deconstructing
-
 const formProps: MyFormProps = {
-  IDToSave: 0,
-  onSubmit: (ccId: number, answer: string) => {}
+  IDToSave:0,
+  onSubmit: (ccId: number, helpAnswer: string) => {} //only for structure for nextQuestion in index
 };
-export default function Form({ IDToSave, onSubmit }: MyFormProps){//exporting these two props as a requirement in the index.tsx, also passing in values from index.
+export default function Form({ IDToSave, onSubmit }: MyFormProps){//exporting these two props as a requirement in the index.tsx, also passing in ID from IDToSave
     const [formData, setFormData] = useState(defaultFormData); // formData = defaultFormData
     const {answer} = formData; //deconstructing object
 
@@ -32,7 +31,7 @@ export default function Form({ IDToSave, onSubmit }: MyFormProps){//exporting th
   
       setFormData({
         ...formData,
-        [e.target.name]: e.target.value,
+        [e.target.name]: e.target.value, //in the event of input
         id: savedValue,
       });
     };
