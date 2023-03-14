@@ -2,7 +2,7 @@ import { getQuestion } from '@/api/book';
 import { useEffect, useState } from 'react';
 import styles from './index.less';
 import Form from "./form"
-import synthesizeSpeech from "./speech3"
+import synthesizeSpeech from "./TTS"
 
 type Answer = { //for user's previous answer display - property structure
   numberID: number;
@@ -27,16 +27,22 @@ export default function () {
   useEffect(() => {
     GetQuestion()
   }, []);
-  
-const generateAudioUrl = async () => {
-    const currentQuestion = results.find((result) => result.id === currentIndex);
 
+  useEffect(() => {
+    const currentQuestion = results.find((result) => result.id === currentIndex);
     if (!currentQuestion) {
       console.error(`Question with id ${currentIndex} not found`);
     }
-     // Update the text state with the current question's text
-     setTex(currentQuestion.question);
-        
+    else {
+      setTex(currentQuestion.question);
+    }
+  }, [currentIndex, results]); //when any of these dependencies change, it will re-run the code in the useEffect.
+
+  console.log(tex);
+  //////////////////////////////////
+
+  //put synthesizeSpeech function with tex (contains the question)
+  const generateAudioUrl = async () => {
         try {
           const audioData = await synthesizeSpeech(tex);
           const blob = new Blob([audioData], { type: "audio/wav" });
@@ -45,16 +51,16 @@ const generateAudioUrl = async () => {
         } catch (error) {
           console.error(error);
         }
-      
-  
+
       return () => {
         URL.revokeObjectURL(audioUrl);
 
   }};
-
+  
   useEffect(() => {
     generateAudioUrl()
-    }, [currentIndex]);
+    }, [tex]);
+
   //By adding currentIndex as a dependency, React will re-run the useEffect hook every time currentIndex changes, and call generateAudioUrl with the new current index, which will update the tex state with the current question's text, generate the audio URL, and update the audioUrl state accordingly.
 //Also, make sure that results is updated correctly when the current question changes, so that results[currentIndex] always points to the correct question object.
 
@@ -93,30 +99,4 @@ const generateAudioUrl = async () => {
 };
 
 
-
-
-
-function generateAudioUrl() {
-  throw new Error('Function not implemented.');
-}
-
-function async() {
-  throw new Error('Function not implemented.');
-}
-
-function setTex(question: any) {
-  throw new Error('Function not implemented.');
-}
-
-function setAudioUrl(url: string) {
-  throw new Error('Function not implemented.');
-}
-
-function setCurrentIndex(arg0: any) {
-  throw new Error('Function not implemented.');
-}
-
-function setUserAnswer(arg0: any[]) {
-  throw new Error('Function not implemented.');
-}
 
