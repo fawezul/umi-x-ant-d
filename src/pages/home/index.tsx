@@ -2,6 +2,7 @@ import { getQuestion } from '@/api/book';
 import { useEffect, useState } from 'react';
 import styles from './index.less';
 import Form from "./form"
+import synthesizeSpeech from "./speech3"
 
 type Answer = { //for user's previous answer display - property structure
   numberID: number;
@@ -12,6 +13,8 @@ export default function () {
   const [results, setResults] = useState<any[]>([]); //create array for questions from db
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [userAnswer, setUserAnswer] = useState<Answer[]>([]); //create array for user's answer
+  const [audioUrl, setAudioUrl] = useState("");
+  const [tex, setTex]= useState("");
 
   const GetQuestion = async () => {
     const result = await getQuestion();
@@ -24,6 +27,36 @@ export default function () {
   useEffect(() => {
     GetQuestion()
   }, []);
+  
+const generateAudioUrl = async () => {
+    const currentQuestion = results.find((result) => result.id === currentIndex);
+
+    if (!currentQuestion) {
+      console.error(`Question with id ${currentIndex} not found`);
+    }
+     // Update the text state with the current question's text
+     setTex(currentQuestion.question);
+        
+        try {
+          const audioData = await synthesizeSpeech(tex);
+          const blob = new Blob([audioData], { type: "audio/wav" });
+          const url = URL.createObjectURL(blob);
+          setAudioUrl(url);
+        } catch (error) {
+          console.error(error);
+        }
+      
+  
+      return () => {
+        URL.revokeObjectURL(audioUrl);
+
+  }};
+
+  useEffect(() => {
+    generateAudioUrl()
+    }, [currentIndex]);
+  //By adding currentIndex as a dependency, React will re-run the useEffect hook every time currentIndex changes, and call generateAudioUrl with the new current index, which will update the tex state with the current question's text, generate the audio URL, and update the audioUrl state accordingly.
+//Also, make sure that results is updated correctly when the current question changes, so that results[currentIndex] always points to the correct question object.
 
   const handleNext = () => {
     setCurrentIndex(currentIndex + 1);
@@ -34,6 +67,7 @@ export default function () {
     setUserAnswer([...userAnswer, { numberID, theirAnswer }]); //changes the value of id and ans
     handleNext();
   };
+  
   //results = questions
   //answerResult = user's answers
 
@@ -41,27 +75,13 @@ export default function () {
     <div>
       <h1 className={styles.title}>Home index</h1>
 
-      {results.length > 0 && (
-          <div>
-            <ol>
-              {userAnswer.map(answerResult => { //answerResult contains user answer
-               const resultIndex = results.findIndex(result => result.id === answerResult.numberID); //finds the question index and if matches, resultIndex = question index
-               const question = resultIndex !== -1 ? results[resultIndex].question : ""; //get question from the results list (contains all questions)
-              return (
-                <li key={answerResult.numberID}>
-                    {question}: {answerResult.theirAnswer}
-                </li>
-                   );})}
-            </ol>
-          </div>
-
-        )}
-
       <div className={styles.scroller}>
         {results.length > 0 && currentIndex < results.length ? (
           <div key={results[currentIndex].id}>
             <div>{results[currentIndex].id}. {results[currentIndex].question}</div>
-            <Form IDToSave={results[currentIndex].id} onSubmit={(questionId: number, answer: string) => nextQuestion(questionId=results[currentIndex].id, answer)} />
+            <audio src={audioUrl} controls />
+
+          <Form IDToSave={results[currentIndex].id} onSubmit={(questionId: number, answer: string) => nextQuestion(questionId=results[currentIndex].id, answer)} />
           </div>
         ) : (
           <div>No more questions to show<br></br>Audio Link</div>
@@ -70,7 +90,33 @@ export default function () {
 
     </div>
   );
+};
+
+
+
+
+
+function generateAudioUrl() {
+  throw new Error('Function not implemented.');
 }
 
+function async() {
+  throw new Error('Function not implemented.');
+}
 
+function setTex(question: any) {
+  throw new Error('Function not implemented.');
+}
+
+function setAudioUrl(url: string) {
+  throw new Error('Function not implemented.');
+}
+
+function setCurrentIndex(arg0: any) {
+  throw new Error('Function not implemented.');
+}
+
+function setUserAnswer(arg0: any[]) {
+  throw new Error('Function not implemented.');
+}
 
