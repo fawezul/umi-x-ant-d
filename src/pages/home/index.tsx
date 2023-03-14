@@ -59,7 +59,7 @@ export default function () {
   
   useEffect(() => {
     generateAudioUrl()
-    }, [tex]); //anytime tex state changes , then it will re-run the useEffect hook to generate another audio.
+    }, [tex]); //anytime tex state changes, then it will re-run the useEffect hook to generate another audio.
 
   //By adding currentIndex as a dependency, React will re-run the useEffect hook every time currentIndex changes, and call generateAudioUrl with the new current index, which will update the tex state with the current question's text, generate the audio URL, and update the audioUrl state accordingly.
 //Also, make sure that results is updated correctly when the current question changes, so that results[currentIndex] always points to the correct question object.
