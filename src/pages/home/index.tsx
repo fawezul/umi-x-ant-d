@@ -82,7 +82,7 @@ export default function () {
   return (
     <div>
       <h1 className={styles.title}>Home index</h1>
-      <Link to="/home">About</Link><br></br>
+      <Link to="/text.tsx">text</Link><br></br>
 
       {results.length > 0 && (
           <div>
