@@ -8,7 +8,7 @@ type Answer = { //for user's previous answer display - property structure
   theirAnswer: string;
 };
 
-export default function () {
+export default function Text() {
   const [results, setResults] = useState<any[]>([]); //create array for questions from db
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [userAnswer, setUserAnswer] = useState<Answer[]>([]); //create array for user's answer
