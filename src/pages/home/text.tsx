@@ -2,9 +2,6 @@ import { getQuestion } from '@/api/book';
 import { useEffect, useState } from 'react';
 import styles from './index.less';
 import Form from "./form"
-import synthesizeSpeech from "../TTS"
-import { Link } from 'umi';
-
 
 type Answer = { //for user's previous answer display - property structure
   numberID: number;
@@ -15,8 +12,6 @@ export default function () {
   const [results, setResults] = useState<any[]>([]); //create array for questions from db
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [userAnswer, setUserAnswer] = useState<Answer[]>([]); //create array for user's answer
-  const [audioUrl, setAudioUrl] = useState("");
-  const [tex, setTex]= useState("");
 
   const GetQuestion = async () => {
     const result = await getQuestion();
@@ -30,42 +25,6 @@ export default function () {
     GetQuestion()
   }, []);
 
-  useEffect(() => {
-    const currentQuestion = results.find((result) => result.id === currentIndex);
-    if (!currentQuestion) {
-      console.error(`Question with id ${currentIndex} not found`);
-    }
-    else {
-      setTex(currentQuestion.question);
-    }
-  }, [currentIndex, results]); //when any of these dependencies change, it will re-run the code in the useEffect.
-
-  console.log(tex);
-  //////////////////////////////////
-
-  //put synthesizeSpeech function with tex (contains the question)
-  const generateAudioUrl = async () => {
-        try {
-          const audioData = await synthesizeSpeech(tex);
-          const blob = new Blob([audioData], { type: "audio/wav" });
-          const url = URL.createObjectURL(blob);
-          setAudioUrl(url);
-        } catch (error) {
-          console.error(error);
-        }
-
-      return () => {
-        URL.revokeObjectURL(audioUrl);
-
-  }};
-  
-  useEffect(() => {
-    generateAudioUrl()
-    }, [tex]); //anytime tex state changes, then it will re-run the useEffect hook to generate another audio.
-
-  //By adding currentIndex as a dependency, React will re-run the useEffect hook every time currentIndex changes, and call generateAudioUrl with the new current index, which will update the tex state with the current question's text, generate the audio URL, and update the audioUrl state accordingly.
-//Also, make sure that results is updated correctly when the current question changes, so that results[currentIndex] always points to the correct question object.
-
   const handleNext = () => {
     setCurrentIndex(currentIndex + 1);
   };
@@ -75,14 +34,12 @@ export default function () {
     setUserAnswer([...userAnswer, { numberID, theirAnswer }]); //changes the value of id and ans
     handleNext();
   };
-  
   //results = questions
   //answerResult = user's answers
 
   return (
     <div>
       <h1 className={styles.title}>Home index</h1>
-      <Link to="/home">About</Link><br></br>
 
       {results.length > 0 && (
           <div>
@@ -104,9 +61,7 @@ export default function () {
         {results.length > 0 && currentIndex < results.length ? (
           <div key={results[currentIndex].id}>
             <div>{results[currentIndex].id}. {results[currentIndex].question}</div>
-            <audio className={styles.audio}src= {audioUrl} controls />
-
-          <Form IDToSave={results[currentIndex].id} onSubmit={(questionId: number, answer: string) => nextQuestion(questionId=results[currentIndex].id, answer)} />
+            <Form IDToSave={results[currentIndex].id} onSubmit={(questionId: number, answer: string) => nextQuestion(questionId=results[currentIndex].id, answer)} />
           </div>
         ) : (
           <div>No more questions to show<br></br>Audio Link</div>
@@ -115,9 +70,6 @@ export default function () {
 
     </div>
   );
-};
-
-
-
+}
 
 
