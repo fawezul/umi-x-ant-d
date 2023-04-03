@@ -96,7 +96,10 @@ export default function () {
 
           </div>
         ) : (
-          <div>No more questions to show</div>
+          <div>No more questions to show <br></br>
+          <a href="https://forms.gle/XtLiSAEarXUKBxvg9">Survey Form</a>
+            
+          </div>
         )}
    </div>
 
