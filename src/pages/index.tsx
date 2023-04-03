@@ -4,21 +4,23 @@ import Text from './home/text';
 
 export default function WelcomePage() {
   return (
+    
+
     <div>
-      <h1 className={styles.title}>Welcome</h1>
+      <p className={styles.title}>Welcome to Chatbot ╚═། ◑ ▃ ◑ །═╝</p>
 
-      <a href="http://localhost:8001/Login">Login</a> <br></br>
-      <a href="http://localhost:8001/home">Speech Version</a><br></br>
+      <Link to="/home" className={styles.buttonText}>Speech Version</Link>
+      
       <Router>
-      <Link to="/text">Text Version</Link>
-
+      <Link  to="/text" className={styles.button}>Text Version</Link>
       <Switch>
         <Route path="/text" component={Text} />
         <Route path="/" exact>
-          <p>Welcome to the homepage!</p>
+          <p></p>
         </Route>
       </Switch>
     </Router>
     </div>
-  );
-}
+    
+  )};
+ 

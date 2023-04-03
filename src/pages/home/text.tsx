@@ -3,12 +3,15 @@ import { useEffect, useState } from 'react';
 import styles from './index.less';
 import Form from "./form"
 
+
+
 type Answer = { //for user's previous answer display - property structure
   numberID: number;
   theirAnswer: string;
 };
 
 export default function Text() {
+
   const [results, setResults] = useState<any[]>([]); //create array for questions from db
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [userAnswer, setUserAnswer] = useState<Answer[]>([]); //create array for user's answer
@@ -38,8 +41,8 @@ export default function Text() {
   //answerResult = user's answers
 
   return (
-    <div>
-      <h1 className={styles.title}>Home index</h1>
+    <div className={styles.container}>
+      <div className={styles.scroller}>
 
       {results.length > 0 && (
           <div>
@@ -49,7 +52,12 @@ export default function Text() {
                const question = resultIndex !== -1 ? results[resultIndex].question : ""; //get question from the results list (contains all questions)
               return (
                 <li key={answerResult.numberID}>
-                    {question}: {answerResult.theirAnswer}
+                  <p className={styles.bot}>Bot</p> 
+                  <p className={styles.colon}>:</p>
+                    <li className={styles.questionBot}>{question}</li> <br></br>
+                    <p className={styles.user}>User</p> 
+                    <p className={styles.colon}>:</p>
+                    <li className={styles.answer}>{answerResult.theirAnswer}</li>
                 </li>
                    );})}
             </ol>
@@ -57,14 +65,15 @@ export default function Text() {
 
         )}
 
-      <div className={styles.scroller}>
+     
         {results.length > 0 && currentIndex < results.length ? (
-          <div key={results[currentIndex].id}>
-            <div>{results[currentIndex].id}. {results[currentIndex].question}</div>
+          <div key={results[currentIndex]}><p className={styles.bot}>Bot</p> 
+          <p className={styles.colon}>:</p>
+            <div className={styles.question}> {results[currentIndex].question}</div>
             <Form IDToSave={results[currentIndex].id} onSubmit={(questionId: number, answer: string) => nextQuestion(questionId=results[currentIndex].id, answer)} />
           </div>
         ) : (
-          <div>No more questions to show<br></br>Audio Link</div>
+          <div className={styles.noQuestion}>No more questions to show</div>
         )}
    </div>
 

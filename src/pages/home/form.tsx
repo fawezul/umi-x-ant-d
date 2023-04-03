@@ -1,4 +1,5 @@
 import React, {useState } from "react";
+import styles from './index.less';
 
 //serializing the defaultFormData
 interface DefaultFormData {
@@ -23,8 +24,6 @@ const formProps: MyFormProps = {
 export default function Form({ IDToSave, onSubmit }: MyFormProps){//exporting these two props as a requirement in the index.tsx, also passing in values from index.
     const [formData, setFormData] = useState(defaultFormData); // formData = defaultFormData
     const {answer} = formData; //deconstructing object
-
-    
     const [savedValue, setSavedValue] = useState(IDToSave);
     
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,11 +59,11 @@ export default function Form({ IDToSave, onSubmit }: MyFormProps){//exporting th
     return(
         <>
 
-       <form onSubmit = {formSubmit} action="/submit-form" method = "post">
+       <form className={styles.form} onSubmit = {formSubmit} action="/submit-form" method = "post">
        
        <br/>
-       <input type = "text" name = "answer" value={answer} onChange={onChange} />
-       <button type = "submit">Submit</button>
+       <input type = "text" name = "answer" value={answer} onChange={onChange} /><br></br><br></br>
+       <button >Submit</button>
 
        </form>
        </>

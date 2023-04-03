@@ -1,9 +1,9 @@
 import { getQuestion } from '@/api/book';
 import { useEffect, useState } from 'react';
 import styles from './index.less';
-import Form from "./form"
-import synthesizeSpeech from "../TTS"
-import SpeechMic from "./STT"
+import SpeechMic from "./STT";
+import synthesizeSpeech from "../TTS";
+import SubmitButton from "./formSubmit";
 
 
 type Answer = { //for user's previous answer display - property structure
@@ -81,39 +81,26 @@ export default function () {
 
   return (
     <div>
-      <h1 className={styles.title}>Home index</h1>
-      <br></br>
-
-      {results.length > 0 && (
-          <div>
-            <ol>
-              {userAnswer.map(answerResult => { //answerResult contains user answer
-               const resultIndex = results.findIndex(result => result.id === answerResult.numberID); //finds the question index and if matches, resultIndex = question index
-               const question = resultIndex !== -1 ? results[resultIndex].question : ""; //get question from the results list (contains all questions)
-              return (
-                <li key={answerResult.numberID}>
-                    {question}: {answerResult.theirAnswer}
-                </li>
-                   );})}
-            </ol>
-          </div>
-
-        )}
+      <p className={styles.title}>Talking Chatbot</p>
+    <div className={styles.container}>
+      
 
       <div className={styles.scroller}>
         {results.length > 0 && currentIndex < results.length ? (
-          <div key={results[currentIndex].id}>
-            <div>{results[currentIndex].id}. {results[currentIndex].question}</div>
+          <div key={results[currentIndex]}><p className={styles.bot}>Bot</p> 
+          <p className={styles.colon}>:</p>
+          <div className={styles.question}> {results[currentIndex].question}</div>
             <audio className={styles.audio}src= {audioUrl} controls />
+            <SpeechMic />
+            <SubmitButton onSubmit={(questionId: number, answer: string) => nextQuestion(questionId=results[currentIndex].id, answer)}/>
 
-          <Form IDToSave={results[currentIndex].id} onSubmit={(questionId: number, answer: string) => nextQuestion(questionId=results[currentIndex].id, answer)} />
-          <SpeechMic />
           </div>
         ) : (
           <div>No more questions to show</div>
         )}
    </div>
 
+    </div>
     </div>
   );
 };

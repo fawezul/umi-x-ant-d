@@ -1,14 +1,123 @@
 .title {
     background: rgb(159, 26, 212);
+    text-align: center;
+    font-size: 1.9em;
+    font-family: sans-serif;
   }
 
 .scroller {
-  width: 1000px;
-  height: auto;
-  overflow-y: scroll;
-  scrollbar-color: rebeccapurple green;
-  scrollbar-width: thin;
+
+  background-color: rgb(227, 141, 11);
+
+  text-align: start;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 10px #a0a0a0, 0 0 20px #a0a0a0, 0 0 30px #a0a0a0, 0 0 40px #a0a0a0; /* Neon glow */
+  font-size: 1.1em;
+  flex: 1 1 auto;
+
+  margin: 20px;
+
 }
+
 .audio {
   display: none;
+}
+
+.parent {
+  height: 1080px;
+  background: gray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1000px;
+  
+}
+
+
+.card {
+  border: 2px solid #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff, 0 0 40px #0ff, 0 0 80px #0ff, 0 0 90px #0ff, 0 0 100px #0ff, 0 0 150px #0ff;
+  font-size: 1.1em;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: white;
+  font-family: sans-serif;
+}
+
+div {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.form{
+  text-align: end;
+}
+
+.question{
+  display: inline-block;
+  border: 2px solid black;
+  padding: 5px;
+  margin: 10px;
+  background-color: aliceblue;
+}
+
+.answer{
+  display: inline-block;
+  border: 2px solid black;
+  padding: 5px;
+  margin: 10px;
+  background-color: aliceblue;
+
+}
+
+.answer-container {
+  text-align: end;
+}
+
+.noQuestion{
+  text-align: center;
+  font-size: 1.1em;
+  padding: 5px;
+  margin: 10px;
+  color: white;
+}
+
+input[type="text"] {
+  font-size: 18px;
+  padding: 10px;
+}
+
+.colon{
+  display: inline-block;
+}
+
+.bot{
+  display: inline-block;
+  border: 2px solid black;
+  padding: 5px;
+  margin: 10px;
+  background-color: aliceblue;
+  color:red
+}
+.user{
+  display: inline-block;
+  border: 2px solid black;
+  padding: 5px;
+  margin: 10px;
+  background-color: aliceblue;
+  color:blue
+}
+
+.questionBot{
+  display: inline-block;
+  border: 2px solid black;
+  padding: 5px;
+  margin: 10px;
+  background-color: aliceblue;
+  color:red;
 }

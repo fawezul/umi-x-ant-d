@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
+import MyForm from "./newForm";
+import styles from './index.less';
+
 
 type Props = {
     // define your component's props here
@@ -28,27 +31,34 @@ class SpeechMic extends React.Component<Props, State> {
             displayText: 'speak into your microphone...'
         });
 
-        recognizer.recognizeOnceAsync((result: { reason: any; text: any; }) => {
-            let displayText;
-            if (result.reason === sdk.ResultReason.RecognizedSpeech) {
-                displayText = `RECOGNIZED: Text=${result.text}`
+        
+
+        recognizer.recognized = (s, e) => {
+            if (e.result.reason === sdk.ResultReason.RecognizedSpeech) {
+                this.setState({
+                    displayText: `${e.result.text}`
+                });
             } else {
-                displayText = 'ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.';
+                this.setState({
+                    displayText: 'ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.'
+                });
             }
-
-            this.setState({
-                displayText: displayText
-            });
-        });
+        };
+    
+        recognizer.startContinuousRecognitionAsync();
     }
 
-    render() {
-        return (
-            <div>
-                {this.state.displayText}
-            </div>
-        );
-    }
+  render() {
+      function handleValueChange(value: string): void {
+          throw new Error('Function not implemented.');
+      }
+
+    return (
+      <div>
+        <MyForm value={this.state.displayText} onValueChange={handleValueChange}/>
+      </div>
+    );
+  }
 }
 
 export default SpeechMic;
