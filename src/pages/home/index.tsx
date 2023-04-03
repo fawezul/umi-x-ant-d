@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import styles from './index.less';
 import Form from "./form"
 import synthesizeSpeech from "../TTS"
-import { Link } from 'umi';
+import SpeechMic from "./STT"
 
 
 type Answer = { //for user's previous answer display - property structure
@@ -33,7 +33,7 @@ export default function () {
   useEffect(() => {
     const currentQuestion = results.find((result) => result.id === currentIndex);
     if (!currentQuestion) {
-      console.error(`Question with id ${currentIndex} not found`);
+      console.error("Question with id ${currentIndex} not found");
     }
     else {
       setTex(currentQuestion.question);
@@ -82,7 +82,7 @@ export default function () {
   return (
     <div>
       <h1 className={styles.title}>Home index</h1>
-      <Link to="/text.tsx">text</Link><br></br>
+      <br></br>
 
       {results.length > 0 && (
           <div>
@@ -107,9 +107,10 @@ export default function () {
             <audio className={styles.audio}src= {audioUrl} controls />
 
           <Form IDToSave={results[currentIndex].id} onSubmit={(questionId: number, answer: string) => nextQuestion(questionId=results[currentIndex].id, answer)} />
+          <SpeechMic />
           </div>
         ) : (
-          <div>No more questions to show<br></br>Audio Link</div>
+          <div>No more questions to show</div>
         )}
    </div>
 
